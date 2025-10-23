@@ -66,7 +66,7 @@ import morgan from 'morgan';
 import sequelize from './config/db.js';
 
 import S_A_Router from "./routes/superAdminRoutes.js";
-import videoRoutes from './routes/video/videoRoutes.js";
+import videoRoutes from "./routes/video/videoRoutes.js";
 
 dotenv.config();
 
@@ -102,4 +102,5 @@ app.use('/api/v1/videos', videoRoutes);
 app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);
 });
+
 
