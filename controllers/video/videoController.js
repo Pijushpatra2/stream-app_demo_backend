@@ -1,36 +1,40 @@
 import * as Video from '../../models/video/videoModel.js';
 
-export const getAllVideos = (req, res) => {
-  Video.getAllVideos((err, results) => {
-    if (err) return res.status(500).json({ message: 'Database error', error: err });
-    res.json(results);
-  });
+// 🟩 Get all videos
+export const getAllVideos = async (req, res) => {
+  try {
+    const videos = await Video.getAllVideos();
+    res.json(videos);
+  } catch (err) {
+    res.status(500).json({ message: 'Database error', error: err.message });
+  }
 };
 
-export const getVideoById = (req, res) => {
-  const { id } = req.params;
-  Video.getVideoById(id, (err, results) => {
-    if (err) return res.status(500).json({ message: 'Database error', error: err });
-    if (results.length === 0) return res.status(404).json({ message: 'Video not found' });
-    res.json(results[0]);
-  });
+// 🟩 Get video by ID
+export const getVideoById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const video = await Video.getVideoById(id);
+
+    if (!video) return res.status(404).json({ message: 'Video not found' });
+    res.json(video);
+  } catch (err) {
+    res.status(500).json({ message: 'Database error', error: err.message });
+  }
 };
 
-
+// 🟩 Add video (your existing code is fine)
 export const addVideo = async (req, res) => {
   try {
     const videoFile = req.files?.video_file?.[0];
     const thumbnailFile = req.files?.thumbnail?.[0];
 
-    const videoUrl = videoFile?.path;
-    const thumbnailUrl = thumbnailFile?.path;
-
     const data = {
       super_admin_name: req.body.super_admin_name,
       title: req.body.title,
       description: req.body.description,
-      video_url: videoUrl,
-      thumbnail_url: thumbnailUrl,
+      video_url: videoFile?.path,
+      thumbnail_url: thumbnailFile?.path,
       resolution: req.body.resolution,
       visibility: req.body.visibility || 'public',
     };
@@ -42,19 +46,24 @@ export const addVideo = async (req, res) => {
   }
 };
 
-export const updateVideo = (req, res) => {
-  const { id } = req.params;
-  const data = req.body;
-  Video.updateVideo(id, data, (err) => {
-    if (err) return res.status(500).json({ message: 'Failed to update video', error: err });
+// 🟩 Update video
+export const updateVideo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Video.updateVideo(id, req.body);
     res.json({ message: 'Video updated successfully' });
-  });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to update video', error: err.message });
+  }
 };
 
-export const deleteVideo = (req, res) => {
-  const { id } = req.params;
-  Video.deleteVideo(id, (err) => {
-    if (err) return res.status(500).json({ message: 'Failed to delete video', error: err });
+// 🟩 Delete video
+export const deleteVideo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Video.deleteVideo(id);
     res.json({ message: 'Video deleted successfully' });
-  });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to delete video', error: err.message });
+  }
 };
