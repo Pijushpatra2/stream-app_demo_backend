@@ -26,25 +26,34 @@ export const getVideoById = async (req, res) => {
 // 🟩 Add video (your existing code is fine)
 export const addVideo = async (req, res) => {
   try {
-    const videoFile = req.files?.video_file?.[0];
-    const thumbnailFile = req.files?.thumbnail?.[0];
+    console.log("Received files:", req.files); // 🔥 Debug
+
+    const videoFile = req.files.video_file?.[0];
+    const thumbnailFile = req.files.thumbnail?.[0];
+
+    if (!videoFile) {
+      return res.status(400).json({ message: "Video file is required" });
+    }
 
     const data = {
       super_admin_name: req.body.super_admin_name,
       title: req.body.title,
       description: req.body.description,
-      video_url: videoFile?.path,
-      thumbnail_url: thumbnailFile?.path,
+      video_url: videoFile.path,       // store the uploaded path
+      thumbnail_url: thumbnailFile?.path || null,
       resolution: req.body.resolution,
-      visibility: req.body.visibility || 'public',
+      visibility: req.body.visibility || "public",
     };
 
     await Video.addVideo(data);
-    res.status(201).json({ message: 'Video uploaded successfully', data });
+    res.status(201).json({ message: "Video uploaded successfully", data });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to upload video', error: error.message });
+    console.error("❌ Upload error:", error);
+    res.status(500).json({ message: "Failed to upload video", error: error.message });
   }
 };
+
+
 
 // 🟩 Update video
 export const updateVideo = async (req, res) => {
