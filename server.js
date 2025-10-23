@@ -71,7 +71,7 @@ import videoRoutes from "./routes/video/videoRoutes.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
 // Middleware
 app.use(express.json());
@@ -102,5 +102,6 @@ app.use('/api/v1/videos', videoRoutes);
 app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);
 });
+
 
 
