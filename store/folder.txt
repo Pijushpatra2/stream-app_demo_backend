@@ -1,0 +1,60 @@
+backend/
+├─ src/
+│  ├─ config/
+│  │  ├─ db.js                # MySQL connection using Sequelize or mysql2
+│  │  └─ env.js               # Environment variables loader
+│  │
+│  ├─ models/                 # Sequelize models (tables)
+│  │  ├─ SuperAdmin.js
+│  │  ├─ Tenant.js
+│  │  ├─ Admin.js
+│  │  ├─ User.js
+│  │  ├─ Role.js
+│  │  ├─ Permission.js
+│  │  ├─ Plan.js
+│  │  ├─ Subscription.js
+│  │  ├─ TenantSetting.js
+│  │  └─ AuditLog.js
+│  │
+│  ├─ controllers/            # Business logic for each module
+│  │  ├─ superAdminController.js
+│  │  ├─ tenantController.js
+│  │  ├─ adminController.js
+│  │  ├─ userController.js
+│  │  ├─ roleController.js
+│  │  ├─ permissionController.js
+│  │  ├─ planController.js
+│  │  ├─ subscriptionController.js
+│  │  ├─ tenantSettingController.js
+│  │  └─ auditLogController.js
+│  │
+│  ├─ routes/                 # Express routes per module
+│  │  ├─ superAdminRoutes.js
+│  │  ├─ tenantRoutes.js
+│  │  ├─ adminRoutes.js
+│  │  ├─ userRoutes.js
+│  │  ├─ roleRoutes.js
+│  │  ├─ permissionRoutes.js
+│  │  ├─ planRoutes.js
+│  │  ├─ subscriptionRoutes.js
+│  │  ├─ tenantSettingRoutes.js
+│  │  └─ auditLogRoutes.js
+│  │
+│  ├─ middlewares/            # Auth, permissions, error handling
+│  │  ├─ authMiddleware.js
+│  │  ├─ roleMiddleware.js
+│  │  └─ errorMiddleware.js
+│  │
+│  ├─ utils/                  # Helper functions (logger, JWT, validation)
+│  │  ├─ jwtHelper.js
+│  │  ├─ passwordHelper.js
+│  │  └─ logger.js
+│  │
+│  ├─ services/               # Optional: complex business logic
+│  │
+│  ├─ app.js                  # Express app
+│  └─ server.js               # Starts server
+│
+├─ package.json
+├─ .env
+└─ README.md
