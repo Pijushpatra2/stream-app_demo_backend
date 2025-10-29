@@ -42,20 +42,15 @@ import {
   addVideo,
   updateVideo,
   deleteVideo,
+  getVideosByAdminId,
 } from '../../controllers/video/videoController.js';
 import { superAdminAuthMiddleware } from '../../middlewares/superAdminAuthMiddleware.js';
 
 const router = express.Router();
 
-/**
- * 🟩 Add Video
- * Fields expected by multer: 
- *   - video_file (required)
- *   - thumbnail (optional)
- */
 router.post(
   '/add',
-  superAdminAuthMiddleware, // ✅ only super admin can upload
+  superAdminAuthMiddleware, // only super admin can upload
   upload.fields([
     { name: 'video_file', maxCount: 1 },
     { name: 'thumbnail', maxCount: 1 },
@@ -64,22 +59,25 @@ router.post(
 );
 
 /**
- * 🟩 Get all videos
+ * Get all videos
  */
 router.get('/get', getAllVideos);
 
 /**
- * 🟩 Get video by ID
+ * Get video by ID
  */
 router.get('/:id', getVideoById);
 
 /**
- * 🟩 Update video details (metadata only, not file)
+ * Update video details (metadata only, not file)
  */
 router.put('/:id', superAdminAuthMiddleware, updateVideo);
 
+//Get videos by admin ID
+router.get('/get/by-admin/:super_admin_id', getVideosByAdminId);
+
 /**
- * 🟩 Delete video
+ * Delete video
  */
 router.delete('/:id', superAdminAuthMiddleware, deleteVideo);
 
