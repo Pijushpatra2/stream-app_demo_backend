@@ -73,3 +73,4 @@ router.put('/:id', superAdminAuthMiddleware, updateSuperAdmin);
 router.delete('/:id', superAdminAuthMiddleware, deleteSuperAdmin);
 
 export default router;
+
