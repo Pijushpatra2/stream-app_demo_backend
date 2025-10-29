@@ -89,7 +89,7 @@
 import * as Video from '../../models/video/videoModel.js';
 
 /**
- * 🟩 Get all videos — Public access
+ * Get all videos — Public access
  */
 export const getAllVideos = async (req, res) => {
   try {
@@ -101,7 +101,7 @@ export const getAllVideos = async (req, res) => {
 };
 
 /**
- * 🟩 Get video by ID — Public access
+ * Get video by ID — Public access
  */
 export const getVideoById = async (req, res) => {
   try {
@@ -118,8 +118,34 @@ export const getVideoById = async (req, res) => {
   }
 };
 
+//Controller: Get videos by admin ID
+export const getVideosByAdminId = async (req, res) => {
+  const { super_admin_id } = req.params;
+
+  console.log(`[CONTROLLER] getVideosByAdminId called with admin ID: ${super_admin_id}`);
+
+  if (!super_admin_id) {
+    console.warn(`[WARN] Missing admin ID in request`);
+    return res.status(400).json({ message: "Admin ID is required" });
+  }
+
+  try {
+    const results = await Video.fetchVideosByAdminId(super_admin_id);
+    console.log(`[SUCCESS] Returning ${results.length} videos for admin ${super_admin_id}`);
+
+    return res.status(200).json({
+      message: "Videos fetched successfully",
+      count: results.length,
+      videos: results,
+    });
+  } catch (err) {
+    console.error(`[ERROR] Could not fetch videos for admin ${super_admin_id}:`, err);
+    return res.status(500).json({ message: "Database error", error: err.message });
+  }
+};
+
 /**
- * 🟩 Add video — Only Super Admins
+ * Add video — Only Super Admins
  */
 // controllers/video/videoController.js
 export const addVideo = async (req, res) => {
@@ -133,11 +159,11 @@ export const addVideo = async (req, res) => {
       return res.status(400).json({ message: "Video file is required" });
     }
 
-    // ✅ Use authenticated super admin info from token
+    // Use authenticated super admin info from token
     const { id: super_admin_id, name: super_admin_name } = req.user;
 
     const data = {
-      super_admin_id, // ✅ from token
+      super_admin_id, // from token
       super_admin_name, // optional, for logging/display
       title: req.body.title,
       description: req.body.description,
@@ -154,7 +180,7 @@ export const addVideo = async (req, res) => {
       data,
     });
   } catch (error) {
-    console.error("❌ Upload error:", error);
+    console.error("Upload error:", error);
     res.status(500).json({
       status: "error",
       message: "Failed to upload video",
@@ -165,7 +191,7 @@ export const addVideo = async (req, res) => {
 
 
 /**
- * 🟩 Update video — Only Super Admins
+ * Update video — Only Super Admins
  */
 export const updateVideo = async (req, res) => {
   try {
@@ -186,7 +212,7 @@ export const updateVideo = async (req, res) => {
 };
 
 /**
- * 🟩 Delete video — Only Super Admins
+ * Delete video — Only Super Admins
  */
 export const deleteVideo = async (req, res) => {
   try {
