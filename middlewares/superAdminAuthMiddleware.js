@@ -83,7 +83,7 @@
 //     req.user = superAdmin; // Attach super admin to request
 //     next();
 //   } catch (error) {
-//     logger.error(`❌ superAdminAuthMiddleware: ${error.message}`);
+//     logger.error(` superAdminAuthMiddleware: ${error.message}`);
 //     return res.status(401).json({
 //       status: 'error',
 //       message: 'Invalid or expired token',
@@ -109,7 +109,7 @@ export const superAdminAuthMiddleware = async (req, res, next) => {
       return res.status(401).json({ message: "Invalid super admin" });
     }
 
-    // ✅ attach as req.user (so your controller works)
+    //attach as req.user (so your controller works)
     req.user = {
       id: superAdmin.super_admin_id,
       name: superAdmin.name,
