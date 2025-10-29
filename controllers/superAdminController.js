@@ -8,18 +8,39 @@ import { logger } from '../utils/logger.js';
  * Create a new super admin
  */
 export const createSuperAdmin = async (req, res, next) => {
-    try {
-        const { name, email, password } = req.body;
-        const password_hash = await hashPassword(password);
+  try {
+    const { name, email, password } = req.body;
 
-        const superAdmin = await SuperAdmin.create({ name, email, password_hash });
-        res.status(201).json({ status: 'success', data: superAdmin });
-    } catch (error) {
-        logger.error(`createSuperAdmin: ${error.message}`);
-        next(error);
-    }
+    // Hash password
+    const password_hash = await hashPassword(password);
+
+    // Create super admin
+    const superAdmin = await SuperAdmin.create({ name, email, password_hash });
+
+    // Generate token (attach super_admin_id)
+    const token = generateToken({
+      id: superAdmin.super_admin_id,
+      role: 'super_admin',
+    });
+
+    // Respond with both data and token
+    res.status(201).json({
+      status: 'success',
+      message: 'Super admin account created successfully',
+      data: {
+        superAdmin: {
+          super_admin_id: superAdmin.super_admin_id,
+          name: superAdmin.name,
+          email: superAdmin.email,
+        },
+        token,
+      },
+    });
+  } catch (error) {
+    logger.error(`createSuperAdmin: ${error.message}`);
+    next(error);
+  }
 };
-
 /**
  * Super admin login
  */
